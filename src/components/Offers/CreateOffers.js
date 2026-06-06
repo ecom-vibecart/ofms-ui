@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 const CreateOffer = () => {
   const dispatch = useDispatch();
-  const { offerDetails, loading, error, success } = useSelector((state) => state.offers);
+  const { offerDetails, success } = useSelector((state) => state.offers);
   const [formErrors, setFormErrors] = useState({});
   const [newItem, setNewItem] = useState([]);
   const [newItemIds, setNewItemIds] = useState([]); // Changed to store multiple item IDs
@@ -273,6 +273,7 @@ const CreateOffer = () => {
     if (newItem.itemId) {
       fetchAvailableSkus(newItem.itemId);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newItem.itemId]);
 
   useEffect(() => {

@@ -7,7 +7,6 @@ export const deleteOffer = createAsyncThunk(
   'deleteOffers/deleteOffer',
   async (offerId, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
       await axios.delete(`${VIBECART_URI}/api/v1/vibe-cart/offers/${offerId}`, {
         // headers: {
         //   'Authorization': `Bearer ${token}`,

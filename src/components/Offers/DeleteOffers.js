@@ -12,7 +12,7 @@ const DeleteOffers = () => {
   const [selectAll, setSelectAll] = useState(false);
   const dispatch = useDispatch();
 
-  const { offers, status, error } = useSelector((state) => state.deleteOffers);
+  const { offers } = useSelector((state) => state.deleteOffers);
 
   useEffect(() => {
     const fetchOffers = async () => {

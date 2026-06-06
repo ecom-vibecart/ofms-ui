@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FaUser, FaSignOutAlt } from 'react-icons/fa';
 import './Header.css';
 import { FaRegUserCircle } from "react-icons/fa";
 const Header = ({ onLogout, isLoggedIn, isLoginPage }) => {
@@ -44,9 +43,9 @@ const Header = ({ onLogout, isLoggedIn, isLoginPage }) => {
                     >
                         <FaRegUserCircle className="user-icon" size={24} color='#dd1e25'/>
                         <div className={`dropdown-menu ${dropdownOpen ? 'show' : ''}`}>
-                            <a href="#" className="dropdown-item">{username}</a>
-                            <a href="#" className="dropdown-item">Settings</a>
-                            <a href="#" className="dropdown-item" onClick={handleLogout}>Sign out</a>
+                            <span className="dropdown-item">{username}</span>
+                            <span className="dropdown-item">Settings</span>
+                            <button className="dropdown-item" onClick={handleLogout}>Sign out</button>
                         </div>
                     </div>
                  )}
