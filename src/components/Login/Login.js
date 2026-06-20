@@ -3,105 +3,87 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { login } from '../Redux/authSlice';
-import './Login.css'; // Ensure this file includes your custom styles
+import './Login.css';
 import { VIBECART_URI } from '../Services/service';
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    role: 'ADMIN',
-  });
-  const [errors, setErrors] = useState({ email: '', password: '', auth: '' });
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const validateForm = () => {
-    const newErrors = { email: '', password: '' };
-    let isValid = true;
-
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-      isValid = false;
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
+  const validate = () => {
+    let valid = true;
+    setEmailError('');
+    setPasswordError('');
+    if (!email) { setEmailError('Email is required'); valid = false; }
+    if (!password) { setPasswordError('Password is required'); valid = false; }
+    return valid;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({ email: '', password: '', auth: '' });
-    if (validateForm()) {
-      try {
-        // Validate user credentials using email and password
-      const response = await axios.post(`${VIBECART_URI}/api/v1/vibe-cart/accounts/validate?type=user`, formData);
-
-        sessionStorage.setItem('token', response.data.message);
-        sessionStorage.setItem('email', formData.email);
-        dispatch(login()); // Update auth state in Redux
-        navigate('/dashboard'); // Navigate to the dashboard
-      } catch (error) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          auth: 'Invalid email or password',
-        }));
-      }
+    if (!validate()) return;
+    setError('');
+    setLoading(true);
+    try {
+      const response = await axios.post(`${VIBECART_URI}/api/v1/vibe-cart/accounts/validate?type=user`, { email, password, role: 'ADMIN' });
+      const token = response.data.message || response.data.token || response.data.data?.token;
+      if (!token) throw new Error('No token received');
+      sessionStorage.setItem('token', token);
+      sessionStorage.setItem('email', email);
+      dispatch(login());
+      navigate('/dashboard');
+    } catch {
+      setError('Invalid email or password. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center max-vh-100">
-    <div className="card" style={{ width: '28rem' }}>
-      <div className="card-header text-center">
-        <h2 className="login-title">Login</h2>
-      </div>
-      <div className="card-body">
+    <div className="login-page">
+      <div className="login-card">
+        <div className="login-logo">
+          <span className="bold">VIBE</span><span>CART</span>
+        </div>
+        <p className="login-subtitle">Offer Management System</p>
+
         <form onSubmit={handleSubmit}>
-          <div className="form-group mb-3">
-            <label htmlFor="email" className="form-label">Email</label>
+          <div className="form-group">
+            <label className="form-label">Email</label>
             <input
               type="email"
-              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
+              className={`form-control ${emailError ? 'error-highlight' : ''}`}
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="admin@vibecart.com"
+              autoFocus
             />
-            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+            {emailError && <div className="error-message">{emailError}</div>}
           </div>
-          <div className="form-group mb-3">
-            <label htmlFor="password" className="form-label">Password</label>
+          <div className="form-group">
+            <label className="form-label">Password</label>
             <input
               type="password"
-              className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
+              className={`form-control ${passwordError ? 'error-highlight' : ''}`}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="••••••••"
             />
-            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+            {passwordError && <div className="error-message">{passwordError}</div>}
           </div>
-          <button type="submit" className="btn  w-100">Login</button>
-          {errors.auth && <div className="text-danger text-center mt-2">{errors.auth}</div>}
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? 'Signing in…' : 'Sign In'}
+          </button>
+          {error && <div className="login-error">{error}</div>}
         </form>
       </div>
     </div>
-  </div>
-  
   );
 };
 

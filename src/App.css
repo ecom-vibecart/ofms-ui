@@ -58,8 +58,7 @@
   display: flex;
   flex: 1 1;
   padding-top: 60px;
-  background-image: url('https://tailwindui.com/img/beams-cover@95.jpg');
-  background-size: cover;
+  background-color: var(--vc-bg);
 }
 /* .login-container {
   display: flex;

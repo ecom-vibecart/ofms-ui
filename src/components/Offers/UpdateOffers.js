@@ -13,7 +13,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { FaSearch } from "react-icons/fa";
 const UpdateOffers = () => {
   const dispatch = useDispatch();
-  const { offers, jwtToken } = useSelector(state => state.updateOffers);
+  const { offers, jwtToken, status } = useSelector(state => state.updateOffers);
   const [searchTerm, setSearchTerm] = useState('');
   const [editingOfferId, setEditingOfferId] = useState(null);
   const [editableFields, setEditableFields] = useState({});
@@ -114,6 +114,24 @@ const UpdateOffers = () => {
     "ON_BILL_AMOUNT": "bg-secondary", // Yellow background
     "DISCOUNT_COUPONS": "bg-dark", // Red background
   };
+  if (status === 'loading') {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '60vh' }}>
+        <div className="spinner-border text-danger" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'failed') {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '60vh' }}>
+        <div className="alert alert-danger">Failed to load offers. Please try again.</div>
+      </div>
+    );
+  }
+
   return (
     <div className="update-offers-container">
       <div className="actions-container">
