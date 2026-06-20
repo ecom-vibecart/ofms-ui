@@ -31,11 +31,12 @@ const Login = () => {
     setError('');
     setLoading(true);
     try {
-      const response = await axios.post(`${VIBECART_URI}/api/v1/vibe-cart/accounts/validate?type=user`, { email, password, role: 'ADMIN' });
+      const response = await axios.post(`${VIBECART_URI}/api/v1/vibe-cart/accounts/validate?type=user`, { email, password });
       const token = response.data.message || response.data.token || response.data.data?.token;
       if (!token) throw new Error('No token received');
       sessionStorage.setItem('token', token);
       sessionStorage.setItem('email', email);
+      sessionStorage.setItem('role', response.data.role || '');
       dispatch(login());
       navigate('/dashboard');
     } catch {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { login, logout } from './components/Redux/authSlice';
+import { login, logout, isAdmin } from './components/Redux/authSlice';
 import Login from './components/Login/Login';
 import Dashboard from './components/dashboard/Dashboard';
 import CreateOffers from './components/Offers/CreateOffers';
@@ -36,9 +36,9 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<Navigate to="/dashboard" />} />
                   <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/createOffers" element={<CreateOffers />} />
-                  <Route path="/updateOffers" element={<UpdateOffers />} />
-                  <Route path="/deleteOffers" element={<DeleteOffers />} />
+                  <Route path="/createOffers" element={isAdmin() ? <CreateOffers /> : <Navigate to="/dashboard" />} />
+                  <Route path="/updateOffers" element={isAdmin() ? <UpdateOffers /> : <Navigate to="/dashboard" />} />
+                  <Route path="/deleteOffers" element={isAdmin() ? <DeleteOffers /> : <Navigate to="/dashboard" />} />
                   <Route path="*" element={<Navigate to="/dashboard" />} />
                 </Routes>
               </div>
