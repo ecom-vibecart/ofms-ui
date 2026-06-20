@@ -61,18 +61,20 @@ select:focus {
 }
 
 button[type="submit"] {
-  background-color: #8c0e12;
+  background-color: var(--vc-primary, #dd1e25);
   color: #fff;
   padding: 10px 20px;
   border: none;
-  border-radius: var(--border-radius);
+  border-radius: var(--vc-radius, 6px);
   cursor: pointer;
   width: 100%;
-  transition: background-color 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color var(--vc-transition, 0.2s ease);
 }
 
 button[type="submit"]:hover {
-  background-color: #420c0b;
+  background-color: var(--vc-primary-hover, #b01920);
   color: #fff;
 }
 
@@ -171,10 +173,12 @@ input#entityIds {
 }
 
 .delete-selected-button {
-  background-color: #8c0e12;
+  background-color: var(--vc-error, #dc3545);
   color: #fff;
-  /* Add background color if needed */
+  transition: background-color var(--vc-transition, 0.2s ease);
 }
+
+.delete-selected-button:hover { background-color: #b02a37; }
 
 .update-all-button {
   margin-left: 10px;
@@ -341,28 +345,30 @@ h4 {
 }
 
 .add-item-btn {
-  background-color: #8c0e12;
+  background-color: var(--vc-primary, #dd1e25);
   color: #fff;
   border: none;
-  padding: 10px 20px;
+  padding: 8px 20px;
   cursor: pointer;
+  border-radius: var(--vc-radius, 6px);
+  font-weight: 500;
+  transition: background-color var(--vc-transition, 0.2s ease);
 }
 
-.add-item-btn:hover {
-  background-color: #420c0b;
-}
+.add-item-btn:hover { background-color: var(--vc-primary-hover, #b01920); }
 
 .submit-btn {
-  background-color: #dd1e25;
+  background-color: var(--vc-primary, #dd1e25);
   color: #fff;
   border: none;
-  padding: 10px 20px;
+  padding: 8px 20px;
   cursor: pointer;
+  border-radius: var(--vc-radius, 6px);
+  font-weight: 500;
+  transition: background-color var(--vc-transition, 0.2s ease);
 }
 
-.submit-btn:hover {
-  background-color: #b71c1c;
-}
+.submit-btn:hover { background-color: var(--vc-primary-hover, #b01920); }
 
 .offer-items-list {
   margin-top: 1rem;
