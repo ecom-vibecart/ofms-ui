@@ -13,11 +13,16 @@ function Dashboard() {
   const [totalOffers, setTotalOffers] = useState(0);
   const [activeOffers, setActiveOffers] = useState(0);
   const [expiredOffers, setExpiredOffers] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get(`${VIBECART_URI}/api/v1/vibe-cart/offers`)
-      .then(({ data }) => {
-        const filteredData = data.filter(offer => offer.offerStatus !== "SHELVED");
+    const fetchOffers = async () => {
+      try {
+        const { data } = await axios.get(`${VIBECART_URI}/api/v1/vibe-cart/offers`);
+        // API may return array directly or wrapped in { success, data }
+        const offers = Array.isArray(data) ? data : (data.data || []);
+        const filteredData = offers.filter(offer => offer.offerStatus !== "SHELVED");
 
 
         const currentDate = new Date();
@@ -83,9 +88,34 @@ function Dashboard() {
 
         setActiveOffers(active);
         setExpiredOffers(expired);
-      })
-      .catch(error => console.error('Error fetching data:', error));
+      } catch (err) {
+        console.error('Error fetching offers:', err);
+        setError('Failed to load dashboard data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOffers();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '60vh' }}>
+        <div className="spinner-border text-danger" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '60vh' }}>
+        <div className="alert alert-danger">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mt-4" style={{ fontSize: '14px' }}>
