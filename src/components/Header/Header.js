@@ -6,7 +6,7 @@ const Header = ({ onLogout, isLoggedIn, isLoginPage }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(() => {
-        const storedUsername = localStorage.getItem('email');
+        const storedUsername = sessionStorage.getItem('email');
         if (storedUsername) {
             setUsername(storedUsername);
         }
