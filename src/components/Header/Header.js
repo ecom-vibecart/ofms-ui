@@ -10,9 +10,11 @@ const Header = ({ onLogout, isLoggedIn, isLoginPage }) => {
         if (storedUsername) {
             setUsername(storedUsername);
         }
-    }, []);
+    }, [isLoggedIn]);
 
     const handleLogout = () => {
+        sessionStorage.removeItem('email');
+        sessionStorage.removeItem('token');
         onLogout();
         setDropdownOpen(false);
     };
@@ -42,7 +44,8 @@ const Header = ({ onLogout, isLoggedIn, isLoginPage }) => {
                     >
                         <FaRegUserCircle className="user-icon" size={24} color='#dd1e25'/>
                         <div className={`dropdown-menu ${dropdownOpen ? 'show' : ''}`}>
-                            <span className="dropdown-item">{username}</span>
+                            <div className="dropdown-header">Account</div>
+                            <span className="dropdown-item">{username || 'Admin'}</span>
                             <button className="dropdown-item" onClick={handleLogout}>Sign out</button>
                         </div>
                     </div>
