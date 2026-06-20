@@ -3,15 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchOffers,
   updateOffer,
-  updateMultipleOffers,
-  selectAllOffers,
-  toggleOfferSelection,
   setToken
 } from '../Redux/updateOfferSlice';
 import './Offer.css';
-import { FaCheck } from 'react-icons/fa';
-import { MdOutlineCancel } from 'react-icons/md';
-import { IoMdCreate } from "react-icons/io";
 import { FaCircleCheck } from "react-icons/fa6";
 import { MdCancel } from "react-icons/md";
 import Badge from 'react-bootstrap/Badge';
@@ -19,7 +13,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { FaSearch } from "react-icons/fa";
 const UpdateOffers = () => {
   const dispatch = useDispatch();
-  const { offers, status, error, jwtToken } = useSelector(state => state.updateOffers);
+  const { offers, jwtToken } = useSelector(state => state.updateOffers);
   const [searchTerm, setSearchTerm] = useState('');
   const [editingOfferId, setEditingOfferId] = useState(null);
   const [editableFields, setEditableFields] = useState({});
@@ -39,15 +33,6 @@ const UpdateOffers = () => {
       ...prevFields,
       [name]: name === 'offerDiscountValue' ? parseFloat(value) : value
     }));
-  };
-
-  const handleSelectAllChange = (e) => {
-    const { checked } = e.target;
-    dispatch(selectAllOffers(checked));
-  };
-
-  const handleCheckboxChange = (id) => {
-    dispatch(toggleOfferSelection(id));
   };
 
   const handleEdit = (id) => {
@@ -81,11 +66,6 @@ const UpdateOffers = () => {
     console.log(offerTypeCounts)
     console.log(offers.offerItems[0])
     // Implement search logic
-  };
-
-  const handleUpdateSelected = () => {
-    const selectedOffers = offers.filter(offer => offer.selected).map(offer => offer.offerId);
-    dispatch(updateMultipleOffers({ ids: selectedOffers, data: editableFields, token: jwtToken }));
   };
 
   const filteredOffers = offers.filter(
