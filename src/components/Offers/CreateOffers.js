@@ -153,10 +153,9 @@ const CreateOffer = () => {
   };
   const validateItemId = async (itemId) => {
     try {
-      const response = await fetch(`${VIBECART_URI}/api/v1/vibe-cart/app/items/item/${itemId}/skuIDs`);
-      const data = await response.json();
+      const { data } = await axios.get(`${VIBECART_URI}/api/v1/vibe-cart/app/items/item/${itemId}/skuIDs`);
 
-      if (response.ok && data.skuIDs) {
+      if (data.skuIDs) {
         // Ensure items aren't duplicated
         setNewItem(prevItems => {
           const newItems = data.skuIDs.map(sku => ({

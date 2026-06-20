@@ -26,7 +26,7 @@ const App = () => {
 
   return (
     <div className='app-container'>
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Header onLogout={handleLogout} isLoggedIn={isLoggedIn} />
         <div className='content-container'>
           {isLoggedIn ? (
