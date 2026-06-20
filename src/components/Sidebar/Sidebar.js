@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from 'react-router-dom';
-import './Sidebar.css'; 
+import { isAdmin } from '../Redux/authSlice';
+import './Sidebar.css';
 
 function Sidebar() {
   return (
@@ -10,21 +11,25 @@ function Sidebar() {
           Dashboard
         </NavLink>
       </div>
-      <div className="sidebar-item">
-        <NavLink to="/createOffers" className={({ isActive }) => (isActive ? "active-link" : "")}>
-          Create Offers
-        </NavLink>
-      </div>
-      <div className="sidebar-item">
-        <NavLink to="/updateOffers" className={({ isActive }) => (isActive ? "active-link" : "")}>
-          Update Offers
-        </NavLink>
-      </div>
-      <div className="sidebar-item">
-        <NavLink to="/deleteOffers" className={({ isActive }) => (isActive ? "active-link" : "")}>
-          Delete Offers
-        </NavLink>
-      </div>
+      {isAdmin() && (
+        <>
+          <div className="sidebar-item">
+            <NavLink to="/createOffers" className={({ isActive }) => (isActive ? "active-link" : "")}>
+              Create Offers
+            </NavLink>
+          </div>
+          <div className="sidebar-item">
+            <NavLink to="/updateOffers" className={({ isActive }) => (isActive ? "active-link" : "")}>
+              Update Offers
+            </NavLink>
+          </div>
+          <div className="sidebar-item">
+            <NavLink to="/deleteOffers" className={({ isActive }) => (isActive ? "active-link" : "")}>
+              Delete Offers
+            </NavLink>
+          </div>
+        </>
+      )}
     </div>
   );
 }
