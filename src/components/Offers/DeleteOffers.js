@@ -10,13 +10,14 @@ import { VIBECART_URI } from '../Services/service';
 const DeleteOffers = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectAll, setSelectAll] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
 
   const { offers } = useSelector((state) => state.deleteOffers);
 
   useEffect(() => {
     const fetchOffers = async () => {
-      // const token = localStorage.getItem('token');
       try {
         const response = await axios.get(`${VIBECART_URI}/api/v1/vibe-cart/offers`, {
           // headers: {
@@ -24,12 +25,14 @@ const DeleteOffers = () => {
           //   'Content-Type': 'application/json',
           // },
         });
-        let mydata = response.data;
-        const sortedOffers = mydata.sort((a, b) => new Date(b.offerCreatedAt) - new Date(a.offerCreatedAt));;
-        console.log(sortedOffers);
+        const mydata = Array.isArray(response.data) ? response.data : (response.data.data || []);
+        const sortedOffers = mydata.sort((a, b) => new Date(b.offerCreatedAt) - new Date(a.offerCreatedAt));
         dispatch(setOffers(sortedOffers));
       } catch (err) {
         console.error('Error fetching offers:', err);
+        setError('Failed to load offers.');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -86,6 +89,24 @@ const DeleteOffers = () => {
     "ON_BILL_AMOUNT": "bg-secondary", // Yellow background
     "DISCOUNT_COUPONS": "bg-dark", // Red background
   };
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '60vh' }}>
+        <div className="spinner-border text-danger" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '60vh' }}>
+        <div className="alert alert-danger">{error}</div>
+      </div>
+    );
+  }
+
   return (
     <div className='deletepage-container'>
       <div className="deletepage-content">
