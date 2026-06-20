@@ -48,10 +48,10 @@ const Login = () => {
     if (validateForm()) {
       try {
         // Validate user credentials using email and password
-      await axios.post(`${VIBECART_URI}/api/v1/vibe-cart/accounts/validate?type=user`,formData);
+      const response = await axios.post(`${VIBECART_URI}/api/v1/vibe-cart/accounts/validate?type=user`, formData);
 
-        // Store the email in localStorage
-        localStorage.setItem('email', formData.email);
+        sessionStorage.setItem('token', response.data.message);
+        sessionStorage.setItem('email', formData.email);
         dispatch(login()); // Update auth state in Redux
         navigate('/dashboard'); // Navigate to the dashboard
       } catch (error) {

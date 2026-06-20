@@ -22,7 +22,7 @@ const UpdateOffers = () => {
   const [modalMessage, setModalMessage] = useState('');
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     dispatch(setToken(token));
     dispatch(fetchOffers(token));
   }, [dispatch]);
