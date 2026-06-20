@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css';
+import axios from 'axios';
 import { VIBECART_URI } from '../Services/service';
 
 const COLORS = ['#dd1e25', '#fbb3b5', '#c1121f', '#f08080'];
@@ -14,10 +15,10 @@ function Dashboard() {
   const [expiredOffers, setExpiredOffers] = useState(0);
 
   useEffect(() => {
-    fetch(`${VIBECART_URI}/api/v1/vibe-cart/offers`)
-      .then(response => response.json())
-      .then(data => {
+    axios.get(`${VIBECART_URI}/api/v1/vibe-cart/offers`)
+      .then(({ data }) => {
         const filteredData = data.filter(offer => offer.offerStatus !== "SHELVED");
+
 
         const currentDate = new Date();
         const threeMonthsAgo = new Date();
